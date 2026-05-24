@@ -28,6 +28,6 @@ const MessageSchema = new Schema<IMessage>({
     timestamps: true
 });
 
-MessageSchema.index({ chat: 1, createdAt: -1  }); //older one first
+MessageSchema.index({ chat: 1, createdAt: 1  }); //older one first
 
 export const Message = mongoose.model<IMessage>('Message', MessageSchema);
