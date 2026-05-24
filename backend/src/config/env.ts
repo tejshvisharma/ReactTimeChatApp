@@ -24,9 +24,11 @@ if (!parsedEnv.success) {
 
 export const env = parsedEnv.data;
 
-// Debug log (remove in production)
-console.log("📋 Environment loaded:", {
-  NODE_ENV: env.NODE_ENV,
-  PORT: env.PORT,
-  MONGODB_URI: env.MONGODB_URI ? "✅ Set" : "❌ Missing",
-});
+// Debug log for non-production environments only
+if (env.NODE_ENV !== "production") {
+  console.log("📋 Environment loaded:", {
+    NODE_ENV: env.NODE_ENV,
+    PORT: env.PORT,
+    MONGODB_URI: env.MONGODB_URI ? "✅ Set" : "❌ Missing",
+  });
+}
