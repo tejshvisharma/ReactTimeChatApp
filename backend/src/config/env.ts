@@ -19,14 +19,16 @@ const parsedEnv = envSchema.safeParse(process.env);
 if (!parsedEnv.success) {
   console.error("❌ Invalid environment variables:");
   console.error(parsedEnv.error.flatten().fieldErrors);
-  process.exit(1);
+  throw new Error("Invalid environment variables");
 }
 
 export const env = parsedEnv.data;
 
-// Debug log (remove in production)
-console.log("📋 Environment loaded:", {
-  NODE_ENV: env.NODE_ENV,
-  PORT: env.PORT,
-  MONGODB_URI: env.MONGODB_URI ? "✅ Set" : "❌ Missing",
-});
+// Debug log for non-production environments only
+if (env.NODE_ENV !== "production") {
+  console.log("📋 Environment loaded:", {
+    NODE_ENV: env.NODE_ENV,
+    PORT: env.PORT,
+    MONGODB_URI: env.MONGODB_URI ? "✅ Set" : "❌ Missing",
+  });
+}
