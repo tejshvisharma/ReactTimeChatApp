@@ -7,7 +7,7 @@ async function bootstrap() {
     await connectDatabase();
 
     app.listen(env.PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${env.PORT}`);
+      console.log(`🚀 Server running on ${env.SERVER_URL}:${env.PORT}`);
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error);
