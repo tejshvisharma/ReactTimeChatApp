@@ -1,14 +1,15 @@
 import { Router } from "express";
+import { isLoggedIn } from "../../shared/middleware/authMiddleware";
+import { authCallback, getMe } from "./auth.controller";
 
 const router = Router();
 
-router.get("/", (_req, res) => {
-  res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: "Auth route working",
-    data: null,
-  });
-});
+router.get("/me", isLoggedIn, getMe);
+router.post("/callback", isLoggedIn, authCallback);
+
+
+
+
+
 
 export default router;
