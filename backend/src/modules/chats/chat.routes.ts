@@ -1,9 +1,13 @@
 import { Router } from "express";
+import { isLoggedIn } from "../../shared/middleware/authMiddleware";
+import { getChats, getOrCreateChat } from "./chat.controller";
 
 const router = Router();
 
-router.get("/", (_req, res) => {
-  res.json({ message: "Chats route working" });
-});
+router.use(isLoggedIn);
+
+router.get("/", getChats);
+
+router.post("/with/:participantId", getOrCreateChat);
 
 export default router;
