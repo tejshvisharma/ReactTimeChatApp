@@ -61,14 +61,14 @@ export const initializeSocketServer = (server: httpServer) =>{
         // send the newly connected user detail to all other connected users :
         socket.broadcast.emit('user-online', { userId });
 
-        socket.join(`user-${userId}`);
+        socket.join(`user:${userId}`);
 
         socket.on("join-chat", async (chatId: string) => {
-            socket.join(`chat-${chatId}`);
+            socket.join(`chat:${chatId}`);
         });
 
         socket.on("leave-chat", async (chatId: string) => {
-            socket.leave(`chat-${chatId}`);
+            socket.leave(`chat:${chatId}`);
         });
 
         // handle sending messages :
@@ -76,7 +76,7 @@ export const initializeSocketServer = (server: httpServer) =>{
             try{
                 const { chatId, text } = data;
                 
-                const chat = await Chat.findById({
+                const chat = await Chat.findOne({
                     _id: chatId,
                     participants: userId
                 });
@@ -91,13 +91,11 @@ export const initializeSocketServer = (server: httpServer) =>{
                     text
                 });
 
-                await message.save();
-
                 chat.lastMessage = message._id;
                 chat.lastMessageAt = message.createdAt;
                 await chat.save();
 
-                message.populate("sender", "name email avatar");
+                await message.populate("sender", "name email avatar");
                 // emit to chat room (for users inside the chat)
                 io.to(`chat:${chatId}`).emit("new-message",  message);
 
