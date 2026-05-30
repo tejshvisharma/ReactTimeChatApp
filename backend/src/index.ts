@@ -1,12 +1,18 @@
 import app from "./app";
 import { env } from "./config/env";
 import { connectDatabase } from "./config/database";
+import { createServer } from "http";
+import { initializeSocketServer } from "./sockets/socket";
+
+const httpServer = createServer(app);
+
+initializeSocketServer(httpServer);
 
 async function bootstrap() {
   try {
     await connectDatabase();
 
-    app.listen(env.PORT, () => {
+    httpServer.listen(env.PORT, () => {
       const serverUrl = (() => {
         if (!env.SERVER_URL) {
           return `http://localhost:${env.PORT}`;

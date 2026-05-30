@@ -10,8 +10,10 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.coerce.number().default(5000),
   MONGODB_URI: z.string().min(5, "MONGODB_URI must be a valid connection string"),
-  CLIENT_URL: z.string().url().optional().default("http://localhost:5173"),
-  SERVER_URL: z.string().url().optional(),
+  CLIENT_URL: z.url().optional().default("http://localhost:5173"),
+  SERVER_URL: z.url().optional().default("http://localhost:5000"),
+  EXPO_MOBILE_APP_URL: z.url().optional().default("exp://localhost:8081"),
+  CLERK_SECRET_KEY: z.string().min(5, "CLERK_SECRET_KEY must be a valid string"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
