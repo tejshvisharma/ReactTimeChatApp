@@ -16,6 +16,9 @@ RUN bun install --frozen-lockfile
 # copy the source code
 COPY web/ ./
 
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
+
 # build the application
 RUN bun run build
 
