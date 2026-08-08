@@ -1,3 +1,4 @@
+import  path  from 'path';
 import express from "express";
 import cors from "cors";
 import routes from "./routes";
@@ -5,6 +6,7 @@ import { errorHandler } from "./shared/middleware/errorHandler";
 import { NotFoundError } from "./shared/errors/AppError";
 import { apiResponse } from "./shared/utils/response";
 import { clerkMiddleware } from '@clerk/express';
+import { env } from './config/env';
 const app = express();
 
 app.use(
@@ -29,5 +31,11 @@ app.use((_req, _res, next) => {
 });
 
 app.use(errorHandler);
+if(env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../web/dist")));
 
+  app.get("/{*any}", (_req, res)=>{
+    res.sendFile(path.join(__dirname, "../../web/dist/index.html"));
+  })
+}
 export default app;
